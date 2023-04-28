@@ -26,5 +26,3 @@ comment_menu = InlineKeyboardMarkup(row_width=1).add(add_comment, check_comments
 
 web_store = InlineKeyboardButton(f'Отзывы на {config.SITE}', url=config.LINK)
 check_comments_menu = InlineKeyboardMarkup(row_width=1).add(web_store, to_menu)
-
-

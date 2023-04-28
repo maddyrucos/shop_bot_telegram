@@ -4,6 +4,7 @@ db = sq.connect('shop.db')
 cur = db.cursor()
 
 
+#Инициализация БД
 async def db_start():
 
     cur.execute('''CREATE TABLE IF NOT EXISTS users (
@@ -14,11 +15,13 @@ async def db_start():
     db.commit()
 
     cur.execute('''CREATE TABLE IF NOT EXISTS goods (
-    good_id       INTEGER PRIMARY KEY AUTOINCREMENT,
-    good_name     TEXT,
-    good_cost     INTEGER,
-    good_code     TEXT,
-    good_category TEXT)''') #ТАБЛИЦА ТОВАРОВ
+    good_id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    good_name        TEXT,
+    good_cost        INTEGER,
+    good_code        TEXT,
+    good_category    TEXT,
+    good_description TEXT,
+    good_photo       TEXT    DEFAULT ("https://cdn-icons-png.flaticon.com/512/8212/8212742.png") )''') #ТАБЛИЦА ТОВАРОВ
     db.commit()
 
     cur.execute('''CREATE TABLE IF NOT EXISTS checks (
@@ -34,13 +37,17 @@ async def db_start():
     username   TEXT,
     comment    TEXT,
     rate       INTEGER)''') #ТАБЛИЦА ОТЗЫВОВ
+    db.commit()
 
 
+#Создание профиля пользователя
 async def create_profile(user_id, username, user_firstname):
     user = cur.execute(f"SELECT 1 FROM users WHERE user_id == '{user_id}'").fetchone()
+    #Если пользователя с данным id нет, создается новый
     if not user:
-        cur.execute("INSERT INTO users VALUES(?, ?, ?, 0)", (user_id, username, user_firstname))
+        cur.execute("INSERT INTO users VALUES(?, ?, ?, 0)", (user_id, username, user_firstname)) #Вносятся данные, собранные при нажатии /start и баланс, равный 0
         db.commit()
+
 
 async def set_money(user_id, money):
 
@@ -51,6 +58,7 @@ async def set_money(user_id, money):
 
     cur.execute(f'UPDATE users SET balance = "{new_balance}"')
     db.commit()
+
 
 async def create_check(user_id, money, bill_id):
 

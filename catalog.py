@@ -14,7 +14,7 @@ async def show_categories(bot, dp, cb):
 
         await callback_query.message.delete()
 
-        cur.execute(f'SELECT good_name, good_cost, good_category FROM goods WHERE good_category == "{cb}"')
+        cur.execute(f'SELECT good_name, good_cost, good_category, good_description, good_photo FROM goods WHERE good_category == "{cb}"')
         callbacks = set(cur.fetchall())
         goods_markup = types.InlineKeyboardMarkup(row_width=1)
         for callback in callbacks:
@@ -39,22 +39,21 @@ async def show_descrpition(bot, dp, cb1):
 
         await bot.answer_callback_query(callback_query.id)
 
-        await callback_query.message.delete()
-
         back_to_goods = types.InlineKeyboardButton('⏪ Назад', callback_data=cb1[2])
         apply = types.InlineKeyboardButton('✅ Купить', callback_data='apply_buy')
         apply_mk = types.InlineKeyboardMarkup(row_width=1).add(apply, back_to_goods)
 
+        await callback_query.message.reply_photo(photo = cb1[4],caption=f'<b>Название:</b> {cb1[0]}\n\n<b>Стоимость:</b> {cb1[1]}\n\n<b>Описание:</b>\n{cb1[3]}', parse_mode = 'HTML', reply_markup = apply_mk)
 
-        await callback_query.message.answer(text=f'<b>Название:</b> {cb1[0]}\n\n<b>Стоимость:</b> {cb1[1]}', parse_mode = 'HTML', reply_markup = apply_mk)
-
+        await callback_query.message.delete()
 
         cur.execute(f'SELECT good_name, good_cost, good_category FROM goods WHERE good_name == "{cb1[0]}"')
         good = cur.fetchone()
 
-
         await state.update_data(good = good)
+
         await Buy.buying.set()
+
         await buy_stuff(bot, dp)
 
 
@@ -103,10 +102,3 @@ async def buy_stuff(bot, dp):
             await callback_query.message.answer(text=f'Ваш баланс меньше, чем {good[1]}. Необходимо пополнить баланс на {good[1] - int(user_balance[0])}')
 
             await callback_query.message.answer(text=f'Если у Вас возникли трудности, пишите сюда - @madeezy', reply_markup=mks.to_menu_only)
-
-
-
-
-
-
-

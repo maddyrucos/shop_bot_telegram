@@ -2,7 +2,7 @@ from database import cur, db
 import markups as mks
 from aiogram import types
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-from states import Buy, Comment
+from states import Comment
 from aiogram.dispatcher import FSMContext
 from random import randint
 
@@ -70,7 +70,6 @@ async def watch_comments(callback_query):
 
     for comment in comments:
         avg += comment[2]
-        #c += 1
 
     avg = avg/len(comments)
     r = randint(0, len(comments))
