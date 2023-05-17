@@ -1,10 +1,12 @@
-from database import cur, db
-import markups as mks
-from aiogram import types
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-from states import Comment
 from aiogram.dispatcher import FSMContext
+from aiogram import types
+
 from random import randint
+
+from Database.database import cur, db
+from states import Comment
+import markups as mks
 
 async def add_comment(callback_query, dp):
 
@@ -72,5 +74,5 @@ async def watch_comments(callback_query):
         avg += comment[2]
 
     avg = avg/len(comments)
-    r = randint(0, len(comments))
-    await callback_query.message.answer(f'Средняя оценка - {avg}\nСлучайный отзыв:\n<b>{comments[r][0]}</b>\n<i>{comments[r][1]}</i>', parse_mode = 'HTML', reply_markup = mks.check_comments_menu)
+    r = randint(0, len(comments)-1)
+    await callback_query.message.answer(f'Средняя оценка - {avg}\nСлучайный отзыв:\n\n<b>{comments[r][0]} - {int(comment[2])}/5</b>\n<i>{comments[r][1]}</i>', parse_mode = 'HTML', reply_markup = mks.check_comments_menu)

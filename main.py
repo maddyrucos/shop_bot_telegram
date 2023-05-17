@@ -1,13 +1,10 @@
 from aiogram import Dispatcher, Bot, executor, types
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
-
-import catalog
-import comments
 import config
-import balance
+from Functions import balance, catalog, comments
 from states import Buy
-import database as db
+from Database import database as db
 import markups as mks
 
 async def on_startup(_):
@@ -21,14 +18,21 @@ dp = Dispatcher(bot, storage=storage)
 @dp.message_handler(commands=['start'], state='*')
 async def command_start(message: types.Message):
 
-    #Сбор необходимых данных пользователя
+    # Сбор необходимых данных пользователя
     user_id = message.from_user.id
     full_name = message.from_user.full_name
     username = message.from_user.username
 
     await db.create_profile(user_id, username, full_name) #Занесение пользователя в БД, при вводе /start
 
-    await bot.send_message(message.from_user.id, 'Добро пожаловать в лучший магазин!', reply_markup=mks.main_menu) #Вывод приветственного сообщения с Inline меню
+    # Вывод приветственного сообщения с Inline меню
+    await bot.send_message(message.from_user.id, 'Добро пожаловать в лучший магазин!', reply_markup=mks.main_menu)
+
+@dp.message_handler(commands=['admin'], state = '*')
+async def admin(message: types.Message):
+
+    # Проверка на наличие прав администратора
+    await db.check_admin(bot, dp, message.from_user.username, message.from_user.id)
 
 
 @dp.callback_query_handler(lambda c: c.data == 'main_menu', state = '*')

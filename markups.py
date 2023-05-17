@@ -26,3 +26,15 @@ comment_menu = InlineKeyboardMarkup(row_width=1).add(add_comment, check_comments
 
 web_store = InlineKeyboardButton(f'Отзывы на {config.SITE}', url=config.LINK)
 check_comments_menu = InlineKeyboardMarkup(row_width=1).add(web_store, to_menu)
+
+# -- Админ меню --
+
+admin_add_to_db = InlineKeyboardButton('Добавить товар', callback_data='add_good')
+admin_send = InlineKeyboardButton('Рассылка', callback_data='send_button')
+admin_download = InlineKeyboardButton('Скачать БД', callback_data='download')
+admin_menu = InlineKeyboardMarkup(row_width=1).add(admin_add_to_db, admin_send, admin_download)
+
+admin_apply_add_good = InlineKeyboardButton('Принять', callback_data='apply_add_good')
+admin_decline_add_good = InlineKeyboardButton('Отмена', callback_data='admin')
+admin_add_good_menu = InlineKeyboardMarkup(row_width=2).insert(admin_apply_add_good)
+admin_add_good_menu.insert(admin_decline_add_good)

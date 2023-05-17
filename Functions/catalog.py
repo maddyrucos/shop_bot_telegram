@@ -1,11 +1,11 @@
-from aiogram import types
 from aiogram.dispatcher import FSMContext
+from aiogram import types
 
+from Database.database import cur, db
 from states import Buy
-from database import cur, db
 
-import config
 import markups as mks
+import config
 
 async def show_categories(bot, dp, cb):
     @dp.callback_query_handler(lambda c: c.data == cb, state='*')
