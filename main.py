@@ -106,27 +106,10 @@ async def main_menu(callback_query: types.CallbackQuery):
 @dp.callback_query_handler(lambda c: c.data == 'comment', state='*')
 async def main_menu(callback_query: types.CallbackQuery):
     await bot.answer_callback_query(callback_query.id)
-
     await callback_query.message.delete()
-
-    await callback_query.message.answer('В данном разделе Вы можете посмотреть отзывы пользователей о магазине, а также, оставить свой!', reply_markup=mks.comment_menu)
-
-
-@dp.callback_query_handler(lambda c: c.data == 'check_comments', state='*')
-async def main_menu(callback_query: types.CallbackQuery):
-    await bot.answer_callback_query(callback_query.id)
-
-    await callback_query.message.delete()
-
-    await comments.watch_comments(callback_query)
-
-@dp.callback_query_handler(lambda c: c.data == 'add_comment', state='*')
-async def main_menu(callback_query: types.CallbackQuery):
-    await bot.answer_callback_query(callback_query.id)
-
-    await callback_query.message.delete()
-
-    await comments.add_comment(callback_query, dp)
+    await callback_query.message.answer('Ссылка на мои отзывы:\n'
+                                        'https://www.avito.ru/user/d413ba3274b4d5bc010636a6cf04d542/profile',
+                                        reply_markup=mks.to_menu_only)
 
 
 if __name__ == '__main__':

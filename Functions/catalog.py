@@ -7,6 +7,8 @@ from states import Buy
 import markups as mks
 import config
 
+import os
+
 async def show_categories(bot, dp, cb):
     @dp.callback_query_handler(lambda c: c.data == cb, state='*')
     async def show_goods(callback_query: types.CallbackQuery):
@@ -30,10 +32,10 @@ async def show_categories(bot, dp, cb):
 
         for callback in callbacks:
 
-            await show_descrpition(bot, dp, callback)
+            await show_description(bot, dp, callback)
 
 
-async def show_descrpition(bot, dp, cb1):
+async def show_description(bot, dp, cb1):
     @dp.callback_query_handler(lambda c: c.data == cb1[0], state=Buy.description)
     async def buy(callback_query: types.CallbackQuery, state: FSMContext):
 
@@ -43,7 +45,7 @@ async def show_descrpition(bot, dp, cb1):
         apply = types.InlineKeyboardButton('✅ Купить', callback_data='apply_buy')
         apply_mk = types.InlineKeyboardMarkup(row_width=1).add(apply, back_to_goods)
 
-        await callback_query.message.reply_photo(photo = cb1[4],caption=f'<b>Название:</b> {cb1[0]}\n\n<b>Стоимость:</b> {cb1[1]}\n\n<b>Описание:</b>\n{cb1[3]}', parse_mode = 'HTML', reply_markup = apply_mk)
+        await callback_query.message.reply_photo(photo = f'https://litstile.ru/upload/product/original/2c/ce/5.jpg',caption=f'<b>Название:</b> {cb1[0]}\n\n<b>Стоимость:</b> {cb1[1]}\n\n<b>Описание:</b>\n{cb1[3]}', parse_mode = 'HTML', reply_markup = apply_mk)
 
         await callback_query.message.delete()
 

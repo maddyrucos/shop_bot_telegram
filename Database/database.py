@@ -42,8 +42,8 @@ async def db_start():
     rate       INTEGER)''') # ТАБЛИЦА ОТЗЫВОВ
     db.commit()
 
-    cur.execute("CREATE TABLE IF NOT EXISTS admins(username TEXT PRIMARY KEY)")  #
-    db.commit() # ТАБЛИЦА ОТЗЫВОВ
+    cur.execute("CREATE TABLE IF NOT EXISTS admins(username TEXT PRIMARY KEY)")  # ТАБЛИЦА АДМИНОВ
+    db.commit()
 
 # Создание профиля пользователя
 async def create_profile(user_id, username, user_firstname):
