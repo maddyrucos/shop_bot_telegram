@@ -1,3 +1,7 @@
 from django.contrib import admin
+from .models import *
 
-# Register your models here.
+models_list = [User, Good, Categories, Product, PaymentMethod, Payment, Sale]
+
+for model in models_list:
+    admin.site.register(model)
