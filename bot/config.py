@@ -3,9 +3,5 @@ import os
 
 load_dotenv()
 
-TOKEN = os.getenv('TOKEN')
-
-admin = os.getenv('ADMIN')
-
-SITE = os.getenv('SITE')
-LINK = os.getenv('LINK')
+BOT_TOKEN = os.getenv('BOT_TOKEN')
+ADMIN = os.getenv('ADMIN_ID')

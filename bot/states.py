@@ -1,26 +1,7 @@
-from aiogram.dispatcher.filters.state import State, StatesGroup
+from aiogram.fsm.state import StatesGroup, State
 
-class Buy(StatesGroup):
-
-    description = State()
-    buying = State()
+class User(StatesGroup):
     default = State()
-    deposit = State()
-
-class Comment(StatesGroup):
-
-    basic = State()
-    comment = State()
-
-class Admin(StatesGroup):
-
-    default = State()
-    sending_message = State()
-    name = State()
-    cost = State()
+    count = State()
     code = State()
-    category = State()
-    description = State()
-    photo = State()
-    end = State()
-    apply = State()
+    topup = State()

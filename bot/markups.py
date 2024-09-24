@@ -1,40 +1,62 @@
-from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-import config
+from aiogram.types import  InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-to_menu = InlineKeyboardButton('🏠 Главное меню', callback_data='main_menu')
-to_menu_only = InlineKeyboardMarkup(row_width=1).add(to_menu)
+from . import database as db
+
+to_main_menu = InlineKeyboardButton(text='🏠 Главное меню', callback_data='main_menu')
+to_menu_only = InlineKeyboardMarkup(inline_keyboard=[[to_main_menu]])
+
+catalog = InlineKeyboardButton(text='🛍️ Каталог', callback_data='to_catalog')
+profile = InlineKeyboardButton(text='👤 Профиль', callback_data='profile')
+comments = InlineKeyboardButton(text='🌟 Отзывы', url='https://plati.market/seller/misterheisenberg/1083350/')
+
+def create_main_menu():
+    builder = InlineKeyboardBuilder()
+
+    builder.row(catalog)
+    builder.row(profile)
+    builder.row(comments)
+    return builder.as_markup()
+
+main_menu = create_main_menu()
+
+def create_catalog(categories, path):
+    builder = InlineKeyboardBuilder()
+    for category in categories:
+        if path=='':
+            callback=f'catalog{path}_{category}'
+        elif path=='product':
+            callback=f'product_{category}'
+        else:
+            callback=f'catalog_{path}_{category}'
+        builder.row(InlineKeyboardButton(text=category, callback_data=callback))
+    builder.row(catalog)
+    builder.row(to_main_menu)
+    return builder.as_markup()
 
 
-# -- Главное меню --
+buy = InlineKeyboardButton(text='✅ Купить', callback_data='buy')
+product_menu = InlineKeyboardMarkup(inline_keyboard=[[buy], [catalog], [to_main_menu]])
 
-catalog_btn = InlineKeyboardButton('🛍 Каталог', callback_data='catalog')
-balance_btn = InlineKeyboardButton('💳 Баланс', callback_data='balance')
-comment_btn = InlineKeyboardButton('🗣 Отзывы', callback_data='comment')
-main_menu = InlineKeyboardMarkup(row_width=1).add(catalog_btn, balance_btn, comment_btn)
+count = InlineKeyboardButton(text='Ввести количество', callback_data='count')
+counted_menu = InlineKeyboardMarkup(inline_keyboard=[[count], [catalog], [to_main_menu]])
 
+topup = InlineKeyboardButton(text='💵 Пополнить', callback_data='topup')
+topup_menu = InlineKeyboardMarkup(inline_keyboard=[[topup], [catalog]])
 
-# -- Баланс --
+apply_buy = InlineKeyboardButton(text='✅ Подтвердить', callback_data='apply_buy')
+apply_transactions = InlineKeyboardMarkup(inline_keyboard=[[apply_buy], [catalog]])
 
-balance_deposit = InlineKeyboardButton('🪙 Пополнить', callback_data='deposit')
-balance_menu = InlineKeyboardMarkup(row_width=1).add(balance_deposit, to_menu)
+sales = InlineKeyboardButton(text='Все покупки', callback_data='all_sales')
+activate_code = InlineKeyboardButton(text='Активировать код', callback_data='code')
+profile_menu = InlineKeyboardMarkup(inline_keyboard=[[sales], [topup], [to_main_menu]])
 
-# -- Отзывы --
+def get_topup_methods():
+    methods = db.get_topup_methods()
+    builder = InlineKeyboardBuilder()
+    for method in methods:
+        builder.row(InlineKeyboardButton(text=method.name, callback_data=method.callback))
+    builder.row(to_main_menu)
+    return builder.as_markup()
 
-check_comments = InlineKeyboardButton('👀 Посмотреть отзывы', callback_data = 'check_comments')
-add_comment = InlineKeyboardButton('✍️ Оставить отзыв', callback_data='add_comment')
-comment_menu = InlineKeyboardMarkup(row_width=1).add(add_comment, check_comments, to_menu)
-
-web_store = InlineKeyboardButton(f'Отзывы на {config.SITE}', url=config.LINK)
-check_comments_menu = InlineKeyboardMarkup(row_width=1).add(web_store, to_menu)
-
-# -- Админ меню --
-
-admin_add_to_db = InlineKeyboardButton('Добавить товар', callback_data='add_good')
-admin_send = InlineKeyboardButton('Рассылка', callback_data='send_button')
-admin_download = InlineKeyboardButton('Скачать БД', callback_data='download')
-admin_menu = InlineKeyboardMarkup(row_width=1).add(admin_add_to_db, admin_send, admin_download)
-
-admin_apply_add_good = InlineKeyboardButton('Принять', callback_data='apply_add_good')
-admin_decline_add_good = InlineKeyboardButton('Отмена', callback_data='admin')
-admin_add_good_menu = InlineKeyboardMarkup(row_width=2).insert(admin_apply_add_good)
-admin_add_good_menu.insert(admin_decline_add_good)
+topup_methods = get_topup_methods()
