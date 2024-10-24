@@ -37,6 +37,7 @@ class Product(models.Model):
 	photo = models.ImageField(verbose_name='Фото')
 	is_counted = models.BooleanField(default=False, verbose_name='Несколько')
 	successful_payment_answer = models.ManyToManyField('Good', verbose_name='После оплаты')
+	date_added = models.DateField(auto_now=True)
 
 	class Meta:
 		verbose_name='Товар'
