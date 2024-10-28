@@ -17,7 +17,7 @@ class User(models.Model):
 		return str(self.username)
 
 
-class Categories(models.Model):
+class Category(models.Model):
 	path = models.CharField(verbose_name='Категория', max_length=100)
 
 	class Meta:
@@ -31,13 +31,13 @@ class Categories(models.Model):
 class Product(models.Model):
 	name = models.CharField(verbose_name='Название товара', max_length=100)
 	is_active = models.BooleanField(default=True, verbose_name='Включен')
-	cost = models.FloatField(verbose_name='Цена')
+	cost = models.IntegerField(verbose_name='Цена')
 	description = models.TextField(verbose_name='Описание')
-	categories = models.ForeignKey(Categories, on_delete=models.CASCADE, verbose_name='Категория')
-	photo = models.ImageField(verbose_name='Фото')
+	categories = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Категория')
+	photo = models.ImageField(verbose_name='Фото', upload_to='products/')
 	is_counted = models.BooleanField(default=False, verbose_name='Несколько')
 	successful_payment_answer = models.ManyToManyField('Good', verbose_name='После оплаты')
-	date_added = models.DateField(auto_now=True)
+	date_added = models.DateField(auto_now_add=True)
 
 	class Meta:
 		verbose_name='Товар'
@@ -48,7 +48,6 @@ class Product(models.Model):
 
 
 class Good(models.Model):
-	#name = models.ForeignKey(Product, related_name='good_name', on_delete=models.CASCADE, verbose_name='Товар')
 	is_unlimited = models.BooleanField(default=False, verbose_name='Бесконечный')
 	data = models.TextField(verbose_name='Содержимое')
 
@@ -60,26 +59,9 @@ class Good(models.Model):
 		return str(self.data)
 
 
-class PaymentMethod(models.Model):
-	name = models.CharField(verbose_name='Название', max_length=50)
-	callback = models.CharField(max_length=20)
-	is_active = models.BooleanField(default=False, verbose_name='Активен')
-	description = models.TextField(verbose_name='Описание (для пользователя)')
-	api_key = models.CharField(verbose_name='API KEY', max_length=100, blank=True)
-	extra = models.CharField(verbose_name='Доп. информация', max_length=100, blank=True)
-
-	class Meta:
-		verbose_name='Способ оплаты'
-		verbose_name_plural='Способы оплаты'
-
-	def __str__(self):
-		return str(self.name)
-
-
 class Payment(models.Model):
 	customer = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Покупатель')
 	amount = models.FloatField(verbose_name='Количество')
-	method = models.ForeignKey(PaymentMethod, on_delete=models.DO_NOTHING, default=1, verbose_name='Способ оплаты')
 	status = models.CharField(choices=[('waiting', 'Не оплачено'),
 									   ('paid','Оплачено'),
 									   ('canceled','Отменено')], verbose_name='Статус', max_length=20)

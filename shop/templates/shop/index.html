@@ -1,10 +1,21 @@
+{% extends "shop/layout.html" %}
 {% load static %}
 
-{% for good in last_goods %}
-    <li>
-        good.name<br>
-        good.description<br>
-        good.cost<br>
-    </li>
+{% block title %}
+    <title>Shop</title>
+{% endblock %}
 
-{% endfor %}
+{% block content %}
+    <body>
+        <div class="products">
+            {% for product in last_products %}
+            <div class="product">
+                <img src="{{ product.photo.url }}"><br>
+                <h3>{{ product.name }}</h3>
+                <p>Стоимость: {{ product.cost }} руб.</p>
+                <a class="buy-button" href="{% url 'buy_product' product.id %}">Купить</a>
+            </div>
+            {% endfor %}
+        </div>
+    </body>
+{% endblock %}
