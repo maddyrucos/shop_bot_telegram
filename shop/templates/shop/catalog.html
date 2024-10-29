@@ -1,0 +1,14 @@
+{% extends "shop/layout.html" %}
+{% load static %}
+
+{% block title %}
+    <title>Каталог</title>
+{% endblock %}
+
+{% block content %}
+    <div class="catalog">
+        {% for category in categories %}
+            <a href="{% url 'catalog_path' category %}" style="color: black;">{{ category }}</a>
+        {% endfor %}
+    </div>
+{% endblock %}

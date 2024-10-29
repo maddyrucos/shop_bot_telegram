@@ -5,11 +5,31 @@
 <head>
     <meta charset="UTF-8">
     <link href="{% static 'shop/base.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'shop/search.css' %}" rel="stylesheet" type="text/css"/>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     {% block title %}
     {% endblock %}
 </head>
 <body>
-    {% block content %}
-    {% endblock %}
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{% url 'index' %}">Главная</a></li>
+                <li><a href="{% url 'catalog' %}">Каталог</a></li>
+                <li><a href="{% url 'contacts' %}">Контакты</a></li>
+                <li>
+                    <form id="search-form">
+                        <input type="text" id="search-input" placeholder="Search...">
+                    </form>
+                </li>
+            </ul>
+        </nav>
+        <div id="search-results"></div>
+    </header>
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+    <script src="{% static 'search.js' %}"></script>
 </body>
 </html>

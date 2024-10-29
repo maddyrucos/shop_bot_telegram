@@ -1,0 +1,32 @@
+#search-input {
+    padding: 5px;
+    border: none;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #282c34;
+}
+
+#search-results {
+    position: absolute;
+    background-color: #61b15a;
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+#search-results ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#search-results ul li a {
+    color: #fff;
+    text-decoration: none;
+}
+
+#search-results ul li a:hover {
+    color: #ffc107;
+}
